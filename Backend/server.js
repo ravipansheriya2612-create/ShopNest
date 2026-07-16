@@ -7,8 +7,6 @@ import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 
-connectDB();
-
 const app = express();
 
 const allowedOrigins = [
@@ -20,22 +18,37 @@ const allowedOrigins = [
 app.use(
     cors({
         origin: (origin, callback) => {
+            // Allow Postman, server-to-server requests and listed origins
             if (!origin || allowedOrigins.includes(origin)) {
                 return callback(null, true);
             }
+
+            console.error("Blocked CORS origin:", origin);
 
             return callback(
                 new Error(`CORS blocked origin: ${origin}`)
             );
         },
         credentials: true,
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE",
+            "OPTIONS",
+        ],
+        allowedHeaders: [
+            "Content-Type",
+            "Authorization",
+        ],
     })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (req, res) => {
-    res.send("ShopNest API is running");
+    res.status(200).send("ShopNest API is running");
 });
 
 app.get("/api/health", (req, res) => {
@@ -56,16 +69,30 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-    console.error(error.message);
+    console.error("Server error:", error.message);
 
-    res.status(500).json({
+    const statusCode =
+        error.message?.startsWith("CORS blocked")
+            ? 403
+            : 500;
+
+    res.status(statusCode).json({
         message:
             error.message || "Internal server error",
     });
 });
 
 const PORT = process.env.PORT || 5000;
+const HOST = "0.0.0.0";
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    await connectDB();
+
+    app.listen(PORT, HOST, () => {
+        console.log(
+            `Server running on http://${HOST}:${PORT}`
+        );
+    });
+};
+
+startServer();
