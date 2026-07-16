@@ -37,7 +37,7 @@ function AdminDashboard() {
         } catch (error) {
             toast.error(
                 error.response?.data?.message ||
-                    "Unable to load products"
+                "Unable to load products"
             );
         } finally {
             setLoading(false);
@@ -78,7 +78,7 @@ function AdminDashboard() {
                 setProducts((previous) =>
                     previous.map((product) =>
                         product._id ===
-                        editingProduct._id
+                            editingProduct._id
                             ? response.data
                             : product
                     )
@@ -107,7 +107,7 @@ function AdminDashboard() {
         } catch (error) {
             toast.error(
                 error.response?.data?.message ||
-                    "Unable to save product"
+                "Unable to save product"
             );
 
             return false;
@@ -139,7 +139,7 @@ function AdminDashboard() {
         } catch (error) {
             toast.error(
                 error.response?.data?.message ||
-                    "Unable to delete product"
+                "Unable to delete product"
             );
         }
     };

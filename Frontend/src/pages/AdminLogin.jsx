@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+
 import {
     Link,
     useNavigate,
@@ -64,7 +65,7 @@ function AdminLogin() {
         } catch (error) {
             toast.error(
                 error.response?.data?.message ||
-                    "Unable to login"
+                "Unable to login"
             );
         } finally {
             setLoading(false);

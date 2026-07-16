@@ -6,14 +6,14 @@ import { CartProvider } from "./context/CartContext";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
-        <CartProvider>
-            <App />
+    <CartProvider>
+        <App />
 
-            <Toaster
-                position="top-right"
-                toastOptions={{
-                    duration: 3000,
-                }}
-            />
-        </CartProvider>
+        <Toaster
+            position="top-right"
+            toastOptions={{
+                duration: 3000,
+            }}
+        />
+    </CartProvider>
 );
